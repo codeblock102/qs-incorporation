@@ -1,0 +1,172 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&family=Open+Sans:wght@400;500;600&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    font-family: 'Open Sans', system-ui, sans-serif;
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  body {
+    overflow-x: hidden;
+    width: 100%;
+    position: relative;
+    min-height: 100vh;
+    /* Prevent pull-to-refresh on mobile */
+    overscroll-behavior-y: none;
+    @apply bg-gradient-to-b from-gray-50 to-gray-100;
+  }
+
+  /* Improve touch targets on mobile */
+  button, a {
+    @apply touch-manipulation;
+  }
+
+  /* Prevent text size adjustment on orientation change */
+  * {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Montserrat', system-ui, sans-serif;
+  }
+
+  /* Smooth scrolling, but only if user hasn't requested reduced motion */
+  @media (prefers-reduced-motion: no-preference) {
+    html {
+      scroll-behavior: smooth;
+    }
+  }
+}
+
+@layer components {
+  .gradient-primary {
+    @apply bg-gradient-to-br from-accent-600 to-accent-700;
+  }
+
+  .gradient-accent {
+    @apply bg-gradient-to-br from-accent-500 to-accent-600;
+  }
+
+  .gradient-text {
+    @apply bg-gradient-to-r from-accent-600 to-accent-500 bg-clip-text text-transparent;
+  }
+
+  .btn-primary {
+    @apply inline-flex items-center justify-center
+           px-4 sm:px-6 py-2 sm:py-3 
+           rounded-full bg-accent-500 text-white 
+           hover:bg-accent-600 active:bg-accent-700
+           transition-all duration-200
+           font-medium shadow-glossy hover:shadow-glossy-lg
+           transform hover:-translate-y-0.5
+           text-sm sm:text-base
+           focus:outline-none focus:ring-2 focus:ring-accent-500/50
+           disabled:opacity-50 disabled:cursor-not-allowed
+           touch-manipulation;
+  }
+
+  .btn-secondary {
+    @apply inline-flex items-center justify-center
+           px-4 sm:px-6 py-2 sm:py-3
+           rounded-full bg-white text-accent-600
+           hover:bg-accent-50 active:bg-accent-100
+           transition-all duration-200
+           font-medium shadow-glossy hover:shadow-glossy-lg
+           transform hover:-translate-y-0.5
+           border border-accent-200
+           text-sm sm:text-base
+           focus:outline-none focus:ring-2 focus:ring-accent-500/50
+           disabled:opacity-50 disabled:cursor-not-allowed
+           touch-manipulation;
+  }
+
+  .card {
+    @apply bg-white rounded-soft p-6 sm:p-8
+           shadow-card hover:shadow-card-hover
+           transition-all duration-300
+           border border-gray-100;
+  }
+
+  .responsive-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8;
+  }
+
+  .responsive-grid {
+    @apply grid gap-6 sm:gap-8 lg:gap-10;
+  }
+
+  .responsive-padding {
+    @apply py-12 sm:py-16 md:py-20 lg:py-24;
+  }
+}
+
+/* Fade-in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.6s ease-out forwards;
+}
+
+/* Carousel styles */
+.embla {
+  overflow: hidden;
+  width: 100%;
+  position: relative;
+}
+
+.embla__container {
+  display: flex;
+  width: 100%;
+}
+
+.embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+}
+
+/* Responsive text utilities */
+.text-responsive {
+  @apply text-sm sm:text-base md:text-lg lg:text-xl;
+}
+
+.heading-responsive {
+  @apply text-xl sm:text-2xl md:text-3xl lg:text-4xl;
+}
+
+/* Responsive spacing utilities */
+.section-spacing {
+  @apply my-8 sm:my-12 md:my-16 lg:my-20;
+}
+
+.content-spacing {
+  @apply space-y-4 sm:space-y-6 md:space-y-8;
+}
+
+/* Mobile-specific improvements */
+@media (max-width: 640px) {
+  .touch-scroll {
+    -webkit-overflow-scrolling: touch;
+    scroll-behavior: smooth;
+  }
+  
+  .safe-bottom {
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+}
