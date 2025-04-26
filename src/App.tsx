@@ -25,7 +25,7 @@ function ScrollToTop() {
 
 function App() {
   return (
-    <Router basename="/qs-incorporation/">
+    <Router>
       <ScrollToTop />
       <div className="flex flex-col min-h-screen">
         <Navbar />
