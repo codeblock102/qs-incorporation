@@ -11,6 +11,8 @@ const Contact = () => {
     email: '',
     message: ''
   });
+  
+  const [formSubmitted, setFormSubmitted] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -21,8 +23,28 @@ const Contact = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission
-    console.log('Form submitted:', formData);
+    const form = e.target as HTMLFormElement;
+    
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        "form-name": "contact",
+        ...formData
+      }).toString()
+    })
+      .then(() => {
+        console.log("Form successfully submitted");
+        setFormSubmitted(true);
+        setFormData({
+          firstName: '',
+          lastName: '',
+          company: '',
+          email: '',
+          message: ''
+        });
+      })
+      .catch((error) => console.log(error));
   };
 
   return (
@@ -131,91 +153,106 @@ const Contact = () => {
                   we're here to help.
                 </p>
               </div>
-              <form onSubmit={handleSubmit} className="space-y-8">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
-                      First Name
-                    </label>
-                    <input
-                      type="text"
-                      id="firstName"
-                      name="firstName"
-                      value={formData.firstName}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
-                      required
-                    />
+              {formSubmitted ? (
+                <div className="text-center py-8">
+                  <Mail className="h-12 w-12 text-accent-500 mx-auto mb-4" />
+                  <h3 className="text-2xl font-bold text-primary-900 mb-2">Thank You!</h3>
+                  <p className="text-gray-600">Your message has been sent successfully. We'll get back to you soon.</p>
+                </div>
+              ) : (
+                <form 
+                  onSubmit={handleSubmit} 
+                  name="contact" 
+                  method="POST" 
+                  data-netlify="true"
+                  className="space-y-8"
+                >
+                  <input type="hidden" name="form-name" value="contact" />
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
+                        First Name
+                      </label>
+                      <input
+                        type="text"
+                        id="firstName"
+                        name="firstName"
+                        value={formData.firstName}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
+                        Last Name
+                      </label>
+                      <input
+                        type="text"
+                        id="lastName"
+                        name="lastName"
+                        value={formData.lastName}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
+                        required
+                      />
+                    </div>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <div>
+                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
+                        Email Address
+                      </label>
+                      <input
+                        type="email"
+                        id="email"
+                        name="email"
+                        value={formData.email}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
+                        required
+                      />
+                    </div>
+                    <div>
+                      <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
+                        Company Name
+                      </label>
+                      <input
+                        type="text"
+                        id="company"
+                        name="company"
+                        value={formData.company}
+                        onChange={handleChange}
+                        className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
+                        required
+                      />
+                    </div>
                   </div>
                   <div>
-                    <label htmlFor="lastName" className="block text-sm font-medium text-gray-700 mb-2">
-                      Last Name
+                    <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
+                      Message
                     </label>
-                    <input
-                      type="text"
-                      id="lastName"
-                      name="lastName"
-                      value={formData.lastName}
+                    <textarea
+                      id="message"
+                      name="message"
+                      value={formData.message}
                       onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
+                      rows={6}
+                      className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all resize-none"
                       required
-                    />
+                    ></textarea>
                   </div>
-                </div>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                  <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-2">
-                      Email Address
-                    </label>
-                    <input
-                      type="email"
-                      id="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
-                      required
-                    />
+                  <div className="text-center">
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-full transition-all transform hover:-translate-y-0.5 shadow-glossy hover:shadow-glossy-lg"
+                    >
+                      Send Message
+                      <Send className="ml-2 h-5 w-5" />
+                    </button>
                   </div>
-                  <div>
-                    <label htmlFor="company" className="block text-sm font-medium text-gray-700 mb-2">
-                      Company Name
-                    </label>
-                    <input
-                      type="text"
-                      id="company"
-                      name="company"
-                      value={formData.company}
-                      onChange={handleChange}
-                      className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all"
-                      required
-                    />
-                  </div>
-                </div>
-                <div>
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-2">
-                    Message
-                  </label>
-                  <textarea
-                    id="message"
-                    name="message"
-                    value={formData.message}
-                    onChange={handleChange}
-                    rows={6}
-                    className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all resize-none"
-                    required
-                  ></textarea>
-                </div>
-                <div className="text-center">
-                  <button
-                    type="submit"
-                    className="inline-flex items-center justify-center px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-full transition-all transform hover:-translate-y-0.5 shadow-glossy hover:shadow-glossy-lg"
-                  >
-                    Send Message
-                    <Send className="ml-2 h-5 w-5" />
-                  </button>
-                </div>
-              </form>
+                </form>
+              )}
             </div>
           </motion.div>
         </div>
