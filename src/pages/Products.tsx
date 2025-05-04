@@ -223,9 +223,9 @@ const Products = () => {
 
 const categories = [
   {
-    name: 'Performance Wear',
+    name: 'Sports Wear',
     description: 'Advanced athletic apparel engineered for peak performance',
-    image: 'https://images.unsplash.com/photo-1565292334631-95d1dd9e2970?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1551479460-5e76c686816a?q=80&w=2035&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     features: [
       'Moisture-wicking fabric',
       'Four-way stretch',
@@ -236,7 +236,7 @@ const categories = [
   {
     name: 'Executive Collection',
     description: 'Premium business attire crafted with innovative materials',
-    image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1604298044934-183b970aa1df?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     features: [
       'Wrinkle-resistant',
       'Temperature regulation',
@@ -274,13 +274,13 @@ const categories = [
       'Sustainable materials',
       'Advanced comfort',
       'Versatile design',
-      'Easy care',
+      'Wide range of premium apparel',
     ],
   },
   {
     name: 'Sustainable Collection',
     description: 'Eco-conscious designs using revolutionary materials',
-    image: 'https://images.unsplash.com/photo-1606107557195-0e29a4b5b4aa?ixlib=rb-1.2.1&auto=format&fit=crop&w=800&q=80',
+    image: 'https://images.unsplash.com/photo-1739131886213-7a9580cbc4e1?q=80&w=2049&auto=format&fit=crop&ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D',
     features: [
       'Recycled materials',
       'Zero-waste process',

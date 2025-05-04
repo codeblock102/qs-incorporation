@@ -205,13 +205,13 @@ const About = () => {
 
 const timeline = [
   {
-    year: '2019',
-    title: 'The Beginning',
+    year: '2016',
+    title: 'Company Inauguration',
     description: 'Founded with a vision to revolutionize fashion manufacturing through innovation and sustainability.',
   },
   {
-    year: '2020',
-    title: 'Quality Excellence',
+    year: '2017',
+    title: 'First Order Delivered',
     description: 'Established our premium quality control systems and sustainable manufacturing processes.',
   },
   {
@@ -227,7 +227,7 @@ const timeline = [
   {
     year: '2023',
     title: 'Industry Recognition',
-    description: 'Received multiple awards for our sustainable fashion manufacturing practices.',
+    description: 'Pioneered sustainable fashion manufacturing initiatives with a focus on long-term growth and innovation',
   },
 ];
 
