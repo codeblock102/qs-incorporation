@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
-import { Mail, Phone, MapPin, Send, Globe, Shield, Users, ArrowRight } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Mail, Phone, MapPin, Send, Globe } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -13,6 +13,7 @@ const Contact = () => {
   });
   
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -21,8 +22,18 @@ const Contact = () => {
     });
   };
 
+  const handleCaptchaChange = (value: string | null) => {
+    setCaptchaValue(value);
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (!captchaValue) {
+      alert('Please complete the reCAPTCHA verification');
+      return;
+    }
+    
     const form = e.target as HTMLFormElement;
     
     fetch("/", {
@@ -30,6 +41,7 @@ const Contact = () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         "form-name": "contact",
+        "g-recaptcha-response": captchaValue,
         ...formData
       }).toString()
     })
@@ -43,6 +55,7 @@ const Contact = () => {
           email: '',
           message: ''
         });
+        setCaptchaValue(null);
       })
       .catch((error) => console.log(error));
   };
@@ -168,6 +181,17 @@ const Contact = () => {
                   className="space-y-8"
                 >
                   <input type="hidden" name="form-name" value="contact" />
+                  {/* Honeypot field - hidden from real users but visible to bots */}
+                  <div className="hidden">
+                    <label htmlFor="website" className="sr-only">Website</label>
+                    <input 
+                      type="text" 
+                      id="website" 
+                      name="website" 
+                      tabIndex={-1} 
+                      autoComplete="off"
+                    />
+                  </div>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                     <div>
                       <label htmlFor="firstName" className="block text-sm font-medium text-gray-700 mb-2">
@@ -241,6 +265,12 @@ const Contact = () => {
                       className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all resize-none"
                       required
                     ></textarea>
+                  </div>
+                  <div className="flex justify-center mb-6">
+                    <ReCAPTCHA
+                      sitekey="6LdPDmArAAAAAJAtMoA66qmqpWqS4cy4lVN6JDKV"
+                      onChange={handleCaptchaChange}
+                    />
                   </div>
                   <div className="text-center">
                     <button
