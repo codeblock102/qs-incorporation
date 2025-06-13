@@ -20,7 +20,4 @@
 
 [forms]
   honeypot = "website"
-  recaptcha = true
-
-[build.environment]
-  RECAPTCHA_SECRET = "6LdPDmArAAAAAJAtMoA66qmqpWqS4cy4lVN6JDKV" 
+  recaptcha = true 
