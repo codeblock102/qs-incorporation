@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Globe } from 'lucide-react';
-import ReCAPTCHA from 'react-google-recaptcha';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -13,7 +12,6 @@ const Contact = () => {
   });
   
   const [formSubmitted, setFormSubmitted] = useState(false);
-  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -22,18 +20,8 @@ const Contact = () => {
     });
   };
 
-  const handleCaptchaChange = (value: string | null) => {
-    setCaptchaValue(value);
-  };
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
-    if (!captchaValue) {
-      alert('Please complete the reCAPTCHA verification');
-      return;
-    }
-    
     const form = e.target as HTMLFormElement;
     
     fetch("/", {
@@ -41,7 +29,6 @@ const Contact = () => {
       headers: { "Content-Type": "application/x-www-form-urlencoded" },
       body: new URLSearchParams({
         "form-name": "contact",
-        "g-recaptcha-response": captchaValue,
         ...formData
       }).toString()
     })
@@ -55,7 +42,6 @@ const Contact = () => {
           email: '',
           message: ''
         });
-        setCaptchaValue(null);
       })
       .catch((error) => console.log(error));
   };
@@ -265,12 +251,6 @@ const Contact = () => {
                       className="w-full px-4 py-3 rounded-lg bg-gray-50 border border-gray-200 focus:border-accent-500 focus:ring-2 focus:ring-accent-500/20 text-gray-900 placeholder-gray-500 transition-all resize-none"
                       required
                     ></textarea>
-                  </div>
-                  <div className="flex justify-center mb-6">
-                    <ReCAPTCHA
-                      sitekey="6LdPDmArAAAAAJAtMoA66qmqpWqS4cy4lVN6JDKV"
-                      onChange={handleCaptchaChange}
-                    />
                   </div>
                   <div className="text-center">
                     <button

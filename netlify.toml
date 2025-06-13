@@ -19,5 +19,4 @@
     Referrer-Policy = "strict-origin-when-cross-origin"
 
 [forms]
-  honeypot = "website"
-  recaptcha = true 
+  honeypot = "website" 
