@@ -23,4 +23,4 @@
   recaptcha = true
 
 [build.environment]
-  RECAPTCHA_SECRET = "6LdPDmArAAAAAIVDcar3wokjGJQ2eL7ysBwNyVB1" 
+  RECAPTCHA_SECRET = "6LdPDmArAAAAAJAtMoA66qmqpWqS4cy4lVN6JDKV" 
