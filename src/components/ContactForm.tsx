@@ -9,9 +9,30 @@ const ContactForm = () => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    // Handle form submission here
-    console.log('Form submitted:', formData);
+    const form = e.target as HTMLFormElement;
+  
+    const honeypot = (form.querySelector('input[name="website"]') as HTMLInputElement)?.value || "";
+  
+    fetch("/", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        "form-name": "contact",
+        ...formData,
+        website: honeypot // 🔥 Include the honeypot
+      }).toString()
+    })
+      .then(() => {
+        console.log("Form successfully submitted");
+        setFormData({
+          name: '',
+          email: '',
+          message: ''
+        });
+      })
+      .catch((error) => console.log(error));
   };
+  
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -26,6 +47,7 @@ const ContactForm = () => {
       name="contact" 
       method="POST" 
       data-netlify="true"
+      data-netlify-honeypot="website"
       className="space-y-4"
     >
       <input type="hidden" name="form-name" value="contact" />
@@ -38,6 +60,7 @@ const ContactForm = () => {
           name="website" 
           tabIndex={-1} 
           autoComplete="off"
+          aria-hidden="true"
         />
       </div>
       <div>
