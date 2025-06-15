@@ -21,7 +21,25 @@ const ContactForm = () => {
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-4">
+    <form 
+      onSubmit={handleSubmit} 
+      name="contact" 
+      method="POST" 
+      data-netlify="true"
+      className="space-y-4"
+    >
+      <input type="hidden" name="form-name" value="contact" />
+      {/* Honeypot field - hidden from real users but visible to bots */}
+      <div className="hidden">
+        <label htmlFor="website" className="sr-only">Website</label>
+        <input 
+          type="text" 
+          id="website" 
+          name="website" 
+          tabIndex={-1} 
+          autoComplete="off"
+        />
+      </div>
       <div>
         <label htmlFor="name" className="block text-sm font-medium mb-1">
           Name
