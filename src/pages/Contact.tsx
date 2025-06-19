@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { Mail, Phone, MapPin, Send, Globe } from 'lucide-react';
+import ReCAPTCHA from 'react-google-recaptcha';
 
 const Contact = () => {
   const [formData, setFormData] = useState({
@@ -12,6 +13,9 @@ const Contact = () => {
   });
   
   const [formSubmitted, setFormSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [formError, setFormError] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
@@ -20,30 +24,60 @@ const Contact = () => {
     });
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const form = e.target as HTMLFormElement;
-    
-    fetch("/", {
-      method: "POST",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
+    setIsSubmitting(true);
+    setFormError(null);
+
+    const recaptchaValue = recaptchaRef.current?.getValue();
+    if (!recaptchaValue) {
+      setFormError('Please complete the reCAPTCHA.');
+      setIsSubmitting(false);
+      return;
+    }
+
+    try {
+      const recaptchaResponse = await fetch('/.netlify/functions/verify-recaptcha', {
+        method: 'POST',
+        body: JSON.stringify({ recaptchaValue }),
+      });
+
+      const recaptchaData = await recaptchaResponse.json();
+
+      if (!recaptchaData.success) {
+        setFormError('Failed to verify reCAPTCHA. Please try again.');
+        setIsSubmitting(false);
+        return;
+      }
+
+      const form = e.target as HTMLFormElement;
+      const data = new URLSearchParams({
         "form-name": "contact",
-        ...formData
-      }).toString()
-    })
-      .then(() => {
-        console.log("Form successfully submitted");
-        setFormSubmitted(true);
-        setFormData({
-          firstName: '',
-          lastName: '',
-          company: '',
-          email: '',
-          message: ''
-        });
-      })
-      .catch((error) => console.log(error));
+        ...formData,
+      });
+
+      await fetch("/", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: data.toString()
+      });
+
+      console.log("Form successfully submitted");
+      setFormSubmitted(true);
+      setFormData({
+        firstName: '',
+        lastName: '',
+        company: '',
+        email: '',
+        message: ''
+      });
+    } catch (error) {
+      console.error(error);
+      setFormError('An error occurred. Please try again.');
+    } finally {
+      setIsSubmitting(false);
+      recaptchaRef.current?.reset();
+    }
   };
 
   return (
@@ -164,6 +198,7 @@ const Contact = () => {
                   name="contact" 
                   method="POST" 
                   data-netlify="true"
+                  data-netlify-honeypot="website"
                   className="space-y-8"
                 >
                   <input type="hidden" name="form-name" value="contact" />
@@ -252,12 +287,28 @@ const Contact = () => {
                       required
                     ></textarea>
                   </div>
+
+                  <div className="flex flex-col items-center justify-center">
+                    <ReCAPTCHA
+                      ref={recaptchaRef}
+                      sitekey={import.meta.env.VITE_RECAPTCHA_SITE_KEY}
+                      theme="light"
+                    />
+                  </div>
+
+                  {formError && (
+                    <div className="text-center text-red-500">
+                      {formError}
+                    </div>
+                  )}
+
                   <div className="text-center">
                     <button
                       type="submit"
-                      className="inline-flex items-center justify-center px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-full transition-all transform hover:-translate-y-0.5 shadow-glossy hover:shadow-glossy-lg"
+                      disabled={isSubmitting}
+                      className="inline-flex items-center justify-center px-8 py-4 bg-accent-500 hover:bg-accent-600 text-white font-medium rounded-full transition-all transform hover:-translate-y-0.5 shadow-glossy hover:shadow-glossy-lg disabled:bg-gray-400 disabled:cursor-not-allowed"
                     >
-                      Send Message
+                      {isSubmitting ? 'Sending...' : 'Send Message'}
                       <Send className="ml-2 h-5 w-5" />
                     </button>
                   </div>
