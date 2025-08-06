@@ -11,12 +11,12 @@ const productSlides = [
     description: 'Expert craftsmanship and precision engineering delivering unparalleled quality in every piece.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1598300042247-d088f8ab3a91?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1490481651871-ab68de25d43d?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
     title: 'Fashion Excellence',
     description: 'State-of-the-art facilities combining innovation with meticulous attention to detail.',
   },
   {
-    image: 'https://images.unsplash.com/photo-1544441892-794166f1e3be?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
+    image: 'https://images.unsplash.com/photo-1591047139829-d91aecb6caea?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80',
     title: 'Sustainable Production',
     description: 'Leading the industry with eco-conscious manufacturing practices and innovative materials.',
   }
